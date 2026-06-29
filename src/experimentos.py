@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from src.similitud import similitud_coseno
 from src.tfidf import TFIDF
-
-from main import mostrar_o_guardar
+from src.utils import mostrar_o_guardar
 
 def grafico_longitud(df):
     df["longitud"] = df["tokens"].apply(len)

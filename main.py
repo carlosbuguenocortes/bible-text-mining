@@ -1,17 +1,4 @@
-import os
-import matplotlib
-
-# Detectar si estamos en servidor (sin pantalla)
-EN_SERVER = os.environ.get("DISPLAY","") == ""
-
-if EN_SERVER:
-    matplotlib.use("Agg")
-def mostrar_o_guardar(nombre_archivo):
-    if EN_SERVER:
-        plt.savefig(nombre_archivo)
-        plt.close()
-    else:
-        plt.show()
+from src.utils import mostrar_o_guardar
 
 # =============================
 # 0. IMPORTAR LIBRERÍAS
