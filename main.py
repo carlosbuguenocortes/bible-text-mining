@@ -1,3 +1,18 @@
+import os
+import matplotlib
+
+# Detectar si estamos en servidor (sin pantalla)
+EN_SERVER = os.environ.get("DISPLAY","") == ""
+
+if EN_SERVER:
+    matplotlib.use("Agg")
+def mostrar_o_guardar(nombre_archivo):
+    if EN_SERVER:
+        plt.savefig(nombre_archivo)
+        plt.close()
+    else:
+        plt.show()
+
 # =============================
 # 0. IMPORTAR LIBRERÍAS
 # =============================
@@ -111,7 +126,7 @@ plt.scatter(reducido[:,0], reducido[:,1], c=colores)
 plt.title("PCA de versículos")
 plt.xlabel("Componente 1")
 plt.ylabel("Componente 2")
-plt.show()
+mostrar_o_guardar("pca_versiculos.png")
 
 # =============================
 # 9. BUSCADOR
@@ -185,4 +200,5 @@ sentimiento_libro.plot(kind="bar", figsize=(12,5))
 plt.title("Sentimiento promedio por libro")
 plt.ylabel("Sentimiento")
 plt.xticks(rotation=90)
-plt.show()
+
+mostrar_o_guardar("sentimiento_libros.png")

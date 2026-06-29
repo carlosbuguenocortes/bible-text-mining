@@ -4,6 +4,8 @@ import seaborn as sns
 from src.similitud import similitud_coseno
 from src.tfidf import TFIDF
 
+from main import mostrar_o_guardar
+
 def grafico_longitud(df):
     df["longitud"] = df["tokens"].apply(len)
 
@@ -11,7 +13,7 @@ def grafico_longitud(df):
     plt.title("Distribución de longitud de versículos")
     plt.xlabel("Cantidad de palabras")
     plt.ylabel("Frecuencia")
-    plt.show()
+    mostrar_o_guardar("histograma_versiculos.png")
 
 
 def heatmap_libros(df):
@@ -48,4 +50,4 @@ def heatmap_libros(df):
     sns.heatmap(matriz, xticklabels=libros, yticklabels=libros, cmap="coolwarm")
     plt.title("Heatmap de similitud entre libros")
     plt.xticks(rotation=90)
-    plt.show()
+    mostrar_o_guardar("heatmap_libros.png")
