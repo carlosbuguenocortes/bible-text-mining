@@ -1,20 +1,19 @@
-# -------------------------------
+# =============================
 # 0. IMPORTAR LIBRERÍAS
-# -------------------------------
+# =============================
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 from src.preprocesamiento import Preprocesador
-from src.similitud import similitud_coseno
 from src.tfidf import TFIDF
 from src.buscador import buscar
 from src.ngram import Bigrama, Trigrama, Cuatrigrama
 from src.experimentos import grafico_longitud, heatmap_libros
 
-# -------------------------------
+# =============================
 # 1. CARGAR DATASET
-# -------------------------------
+# =============================
 filas = []
 
 with open("data/bible.csv", encoding="latin-1") as f:
@@ -31,15 +30,15 @@ df = pd.DataFrame(filas, columns=[
 
 df = df[df["id"] != '"Verse ID"']
 
-# -------------------------------
+# =============================
 # 2. LIMPIEZA
-# -------------------------------
+# =============================
 df["book"] = df["book"].str.encode("latin-1").str.decode("utf-8")
 df["text"] = df["text"].str.encode("latin-1").str.decode("utf-8")
 
-# -------------------------------
+# =============================
 # 3. TESTAMENTO
-# -------------------------------
+# =============================
 nuevo_testamento = {
     "Mateo","Marcos","Lucas","Juan","Hechos",
     "Romanos","1 Corintios","2 Corintios","Gálatas","Efesios",
@@ -54,9 +53,9 @@ def detectar_testamento(libro):
 
 df["testament"] = df["book"].apply(detectar_testamento)
 
-# -------------------------------
+# =============================
 # 4. PREPROCESAMIENTO
-# -------------------------------
+# =============================
 df["tokens"] = df["text"].apply(
     lambda x: Preprocesador(x).procesar()
 )
@@ -64,39 +63,42 @@ df["tokens"] = df["text"].apply(
 print("\nTamaño dataset completo:")
 print(df.shape)
 
-# -------------------------------
-# 5. VISUALIZACIONES (SIEMPRE CON TODOs LOS DATOS)
-# -------------------------------
-grafico_longitud(df)
-heatmap_libros(df)
+# =============================
+# 5. SELECCIÓN DATASET
+# =============================
 
-# -------------------------------
-# 6. SELECCIÓN DE DATASET (AQUÍ CAMBIO EL TAMAÑO)
-# -------------------------------
-
-# OPCIÓN 1: dataset completo (lento pero real), si se demora mucho, cambio ala opción 2
+# OPCIÓN 1: dataset completo
 df_trabajo = df.copy()
 
-# OPCIÓN 2: dataset mediano (RÁPIDO)
+# OPCIÓN 2: dataset mediano (descomentar si quieres rapidez)
 # df_trabajo = df.sample(10000, random_state=42)
 
 print("\nTamaño dataset utilizado:")
 print(df_trabajo.shape)
 
-# -------------------------------
+# =============================
+# 6. VISUALIZACIONES
+# =============================
+print("\nGenerando visualizaciones...")
+grafico_longitud(df_trabajo)
+heatmap_libros(df_trabajo)
+
+# =============================
 # 7. TF-IDF
-# -------------------------------
+# =============================
+print("\nCalculando TF-IDF...")
 modelo_tfidf = TFIDF(df_trabajo["tokens"].tolist())
 vectores = modelo_tfidf.transformar()
 
 print("\nCantidad de vectores:")
 print(len(vectores))
 
-# -------------------------------
+# =============================
 # 8. PCA
-# -------------------------------
+# =============================
 from sklearn.decomposition import PCA
 
+print("\nAplicando PCA...")
 pca = PCA(n_components=2)
 reducido = pca.fit_transform(vectores)
 
@@ -111,9 +113,11 @@ plt.xlabel("Componente 1")
 plt.ylabel("Componente 2")
 plt.show()
 
-# -------------------------------
+# =============================
 # 9. BUSCADOR
-# -------------------------------
+# =============================
+print("\nBuscando contexto semántico...")
+
 consulta = "Dios creó la tierra"
 
 resultado = buscar(consulta, modelo_tfidf, vectores, df_trabajo)
@@ -121,12 +125,14 @@ resultado = buscar(consulta, modelo_tfidf, vectores, df_trabajo)
 print("\nResultados de búsqueda:")
 print(resultado)
 
-# -------------------------------
+# =============================
 # 10. CLASIFICADOR
-# -------------------------------
+# =============================
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, confusion_matrix
+
+print("\nEntrenando clasificador...")
 
 X_train, X_test, y_train, y_test = train_test_split(
     vectores, df_trabajo["book"], test_size=0.2
@@ -143,9 +149,11 @@ print(accuracy_score(y_test, y_pred))
 print("\nMatriz de confusión:")
 print(confusion_matrix(y_test, y_pred))
 
-# -------------------------------
+# =============================
 # 11. N-GRAMAS
-# -------------------------------
+# =============================
+print("\nGenerando texto con n-gramas...")
+
 modelo_bigram = Bigrama(df_trabajo["tokens"].tolist())
 print("\nBigram:")
 print(modelo_bigram.generar())
@@ -158,10 +166,12 @@ modelo_4gram = Cuatrigrama(df_trabajo["tokens"].tolist())
 print("\nCuatrigram:")
 print(modelo_4gram.generar())
 
-# -------------------------------
+# =============================
 # 12. SENTIMIENTO
-# -------------------------------
+# =============================
 from textblob import TextBlob
+
+print("\nCalculando sentimiento...")
 
 df_sent = df_trabajo.copy()
 
