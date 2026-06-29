@@ -73,7 +73,7 @@ print(df.shape)
 df_trabajo = df.copy()
 
 # OPCIÓN 2: dataset mediano (descomentar si quieres rapidez)
-# df_trabajo = df.sample(10000, random_state=42)
+#df_trabajo = df.sample(10000, random_state=42)
 
 print("\nTamaño dataset utilizado:")
 print(df_trabajo.shape)

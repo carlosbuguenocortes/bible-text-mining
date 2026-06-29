@@ -8,7 +8,7 @@ class TFIDF:
         self.idf = {}
 
     def calcular_idf(self):
-        print("Calculando IDF...")
+        #print("Calculando IDF...")
         N = len(self.docs)
 
         for palabra in self.vocabulario:
