@@ -1,4 +1,8 @@
 from src.utils import mostrar_o_guardar
+
+# =============================
+# 0. IMPORTAR LIBRERÍAS
+# =============================
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,9 +13,8 @@ from src.buscador import buscar
 from src.ngram import Bigrama, Trigrama, Cuatrigrama
 from src.experimentos import grafico_longitud, heatmap_libros
 
-
 def main():
-
+        
     # =============================
     # 1. CARGAR DATASET
     # =============================
@@ -65,9 +68,14 @@ def main():
     print(df.shape)
 
     # =============================
-    # 5. DATASET
+    # 5. SELECCIÓN DATASET
     # =============================
+
+    # OPCIÓN 1: dataset completo
     df_trabajo = df.copy()
+
+    # OPCIÓN 2: dataset mediano (descomentar si quieres rapidez)
+    #df_trabajo = df.sample(10000, random_state=42)
 
     print("\nTamaño dataset utilizado:")
     print(df_trabajo.shape)
@@ -75,20 +83,26 @@ def main():
     # =============================
     # 6. VISUALIZACIONES
     # =============================
+    print("\nGenerando visualizaciones...")
     grafico_longitud(df_trabajo)
     heatmap_libros(df_trabajo)
 
     # =============================
     # 7. TF-IDF
     # =============================
+    print("\nCalculando TF-IDF...")
     modelo_tfidf = TFIDF(df_trabajo["tokens"].tolist())
     vectores = modelo_tfidf.transformar()
+
+    print("\nCantidad de vectores:")
+    print(len(vectores))
 
     # =============================
     # 8. PCA
     # =============================
     from sklearn.decomposition import PCA
 
+    print("\nAplicando PCA...")
     pca = PCA(n_components=2)
     reducido = pca.fit_transform(vectores)
 
@@ -98,12 +112,18 @@ def main():
     })
 
     plt.scatter(reducido[:,0], reducido[:,1], c=colores)
+    plt.title("PCA de versículos")
+    plt.xlabel("Componente 1")
+    plt.ylabel("Componente 2")
     mostrar_o_guardar("pca_versiculos.png")
 
     # =============================
     # 9. BUSCADOR
     # =============================
+    print("\nBuscando contexto semántico...")
+
     consulta = "Dios creó la tierra"
+
     resultado = buscar(consulta, modelo_tfidf, vectores, df_trabajo)
 
     print("\nResultados de búsqueda:")
@@ -114,7 +134,9 @@ def main():
     # =============================
     from sklearn.model_selection import train_test_split
     from sklearn.naive_bayes import MultinomialNB
-    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    print("\nEntrenando clasificador...")
 
     X_train, X_test, y_train, y_test = train_test_split(
         vectores, df_trabajo["book"], test_size=0.2
@@ -125,24 +147,51 @@ def main():
 
     y_pred = modelo.predict(X_test)
 
-    print("\nAccuracy:")
+    print("\nAccuracy del clasificador:")
     print(accuracy_score(y_test, y_pred))
 
+    print("\nMatriz de confusión:")
+    print(confusion_matrix(y_test, y_pred))
+
     # =============================
-    # 11. SENTIMIENTO
+    # 11. N-GRAMAS
+    # =============================
+    print("\nGenerando texto con n-gramas...")
+
+    modelo_bigram = Bigrama(df_trabajo["tokens"].tolist())
+    print("\nBigram:")
+    print(modelo_bigram.generar())
+
+    modelo_trigram = Trigrama(df_trabajo["tokens"].tolist())
+    print("\nTrigram:")
+    print(modelo_trigram.generar("dios dijo"))
+
+    modelo_4gram = Cuatrigrama(df_trabajo["tokens"].tolist())
+    print("\nCuatrigram:")
+    print(modelo_4gram.generar())
+
+    # =============================
+    # 12. SENTIMIENTO
     # =============================
     from textblob import TextBlob
 
+    print("\nCalculando sentimiento...")
+
     df_sent = df_trabajo.copy()
+
     df_sent["sentimiento"] = df_sent["text"].apply(
         lambda x: TextBlob(x).sentiment.polarity
     )
 
-    df_sent.groupby("book")["sentimiento"].mean().plot(kind="bar")
+    sentimiento_libro = df_sent.groupby("book")["sentimiento"].mean()
+
+    sentimiento_libro.plot(kind="bar", figsize=(12,5))
+    plt.title("Sentimiento promedio por libro")
+    plt.ylabel("Sentimiento")
     plt.xticks(rotation=90)
+
     mostrar_o_guardar("sentimiento_libros.png")
 
 
 if __name__ == "__main__":
     main()
-    
