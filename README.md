@@ -49,14 +49,14 @@ biblical-text-mining/
 │   └── bible.csv
 │
 ├── src/
-│   ├── preprocessor.py
+│   ├── buscador.py
+│   ├── experimentos.py
+│   ├── ngram.py
+│   ├── preprocesamiento.py
+│   ├── similitud.py
 │   ├── tfidf.py
-│   ├── search_engine.py
-│   ├── classifier.py
-│   ├── visualization.py
-│   ├── sentiment.py
-│   └── ngram.py
 │   └── utils.py
+│
 ├── main.py
 ├── README.md
 ├── Informe_Taller2.pdf
@@ -67,7 +67,7 @@ biblical-text-mining/
 └── sentimiento_libros.png
 ```
 
-El repositorio también incluye:
+El repositorio incluye además la siguiente documentación y archivos generados:
 
 - **Informe_Taller2.pdf**: informe técnico con el desarrollo completo del laboratorio.
 - **diagrama_de_clases.png**: diagrama UML de la arquitectura implementada.
