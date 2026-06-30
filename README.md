@@ -1,135 +1,156 @@
-# 📖 Bible Text Mining - Minería de Texto en la Biblia
+# Bible Text Mining
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-![NLP](https://img.shields.io/badge/NLP-Text%20Mining-orange.svg)
+## Sistema de análisis de un corpus bíblico mediante técnicas de Procesamiento de Lenguaje Natural
 
-**Revelando patrones y conexiones en la Biblia con minería de texto en Python**
+Este proyecto implementa un sistema de análisis textual sobre la **Biblia Reina-Valera 1960** utilizando técnicas clásicas de Procesamiento de Lenguaje Natural (Natural Language Processing, NLP).
 
-Aplicación de técnicas de **Procesamiento de Lenguaje Natural (NLP)** y **minería de texto** a la Biblia Reina-Valera 1960 en español para descubrir patrones lingüísticos, relaciones semánticas entre libros bíblicos y analizar frecuencias de términos.
+El sistema permite realizar el preprocesamiento del corpus, representar documentos mediante TF-IDF, recuperar información utilizando similitud del coseno, clasificar versículos mediante Naive Bayes, generar texto utilizando modelos N-Gram y realizar un análisis de sentimiento. Además, genera distintas visualizaciones que facilitan el análisis del corpus.
 
----
-
-## 📊 Características del Proyecto
-
-- 🔍 **Análisis de frecuencias** de palabras y términos bíblicos
-- 📈 **Comparación entre libros** de la Biblia
-- 🕸️ **Análisis de co-ocurrencias** entre palabras
-- 🌐 **Matriz de similitud semántica** entre libros
-- ☁️ **Nube de palabras** con los términos más frecuentes
-- 📊 **Visualizaciones** con matplotlib, seaborn y wordcloud
-- 📁 **Exportación de resultados** en múltiples formatos
+El desarrollo fue realizado en **Python**, utilizando un enfoque de **Programación Orientada a Objetos**, con el objetivo de obtener una solución modular, reutilizable y de fácil mantenimiento.
 
 ---
 
-##  Estructura del Repositorio
+# Funcionalidades
+
+El sistema implementa las siguientes funcionalidades:
+
+- Preprocesamiento del corpus bíblico.
+- Construcción manual de la representación TF-IDF.
+- Implementación manual de la similitud del coseno.
+- Motor de búsqueda semántico.
+- Clasificación automática mediante Naive Bayes.
+- Generación de texto utilizando modelos Unigrama, Bigrama, Trigrama y Cuatrigrama.
+- Análisis de sentimiento.
+- Generación automática de visualizaciones.
+
+---
+
+# Tecnologías utilizadas
+
+| Tecnología | Descripción |
+|------------|-------------|
+| Python | Lenguaje principal |
+| Pandas | Manipulación de datos |
+| NumPy | Cálculo numérico |
+| Matplotlib | Visualización |
+| Scikit-Learn | Clasificación y reducción de dimensionalidad (PCA) |
+| TextBlob | Análisis de sentimiento |
+
+---
+
+# Arquitectura del proyecto
+
+La estructura general del proyecto es la siguiente:
+
 ```text
-bible-text-mining/
-├── data/ # Datos textuales de la Biblia
-│ ├── biblia.txt # Texto completo Reina-Valera 1960
-│ └── books/ # Libros individuales (opcional)
-├── outputs/ # Resultados generados
-│ ├── figures/ # Gráficos y visualizaciones
-│ └── statistics/ # Tablas y estadísticas
-├── bible_processing.py # Módulo de procesamiento de texto
-├── bible_analysis.ipynb # Notebook Jupyter con análisis completo
-├── requirements.txt # Dependencias del proyecto
-├── setup.sh # Script de configuración automática
-└── README.md # Este archivo
+biblical-text-mining/
+│
+├── data/
+│   └── bible.csv
+│
+├── src/
+│   ├── preprocessor.py
+│   ├── tfidf.py
+│   ├── search_engine.py
+│   ├── classifier.py
+│   ├── visualization.py
+│   ├── sentiment.py
+│   └── ngram.py
+│
+├── main.py
+├── README.md
+├── Informe_Taller2.pdf
+├── diagrama_de_clases.png
+├── heatmap_libros.png
+├── histograma_versiculos.png
+├── pca_versiculos.png
+└── sentimiento_libros.png
 ```
 
+El repositorio también incluye:
+
+- **Informe_Taller2.pdf**: informe técnico con el desarrollo completo del laboratorio.
+- **diagrama_de_clases.png**: diagrama UML de la arquitectura implementada.
+- **heatmap_libros.png**: mapa de calor de similitud entre libros.
+- **histograma_versiculos.png**: distribución de longitud de los versículos.
+- **pca_versiculos.png**: proyección bidimensional mediante PCA.
+- **sentimiento_libros.png**: sentimiento promedio por libro.
+
 ---
 
-##  Requisitos del Sistema
+# Requisitos
 
-### Requisitos Mínimos
-- **Python 3.8 o superior**
-- **pip** (gestor de paquetes de Python)
-- **4 GB de RAM** (recomendado 8 GB para análisis completos)
-- **2 GB de espacio en disco**
+Para ejecutar el proyecto se requiere:
 
-### Dependencias Principales
-```text
-numpy==1.24.3
-pandas==2.0.3
-matplotlib==3.7.2
-seaborn==0.12.2
-wordcloud==1.9.3
-scikit-learn==1.3.0
-nltk==3.8.1
-jupyter==1.0.0
-notebook==7.0.3
-```
+- Python 3.10 o superior.
+
+Instalar las siguientes bibliotecas:
+
+- pandas
+- numpy
+- matplotlib
+- scikit-learn
+- textblob
+
 ---
 
-## 💻 Instalación y Ejecución
+# Instalación
+
+Clonar el repositorio:
 
 ```bash
-#### Paso 1: Clonar el repositorio
-# Clonar el repositorio
 git clone https://github.com/carlosbuguenocortes/bible-text-mining.git
+```
+
+Ingresar al directorio del proyecto:
+
+```bash
 cd bible-text-mining
 ```
 
+Instalar las dependencias:
 
-Paso 2: Crear y activar entorno virtual
 ```bash
-# Instalar python3-venv si no está instalado
-sudo apt update
-sudo apt install python3-venv python3-pip -y
-
-# Crear entorno virtual
-python3 -m venv venv
-
-# Activar entorno virtual
-source venv/bin/activate
-
-# Verificar activación (debe mostrar la ruta del venv)
-which python
-```
-Paso 3: Script de instalación automática
-```bash
-# Dar permisos de ejecución
-chmod +x setup.sh
-
-# Ejecutar script de configuración
-./setup.sh
-```
-Paso 4: Usar screen para sesiones persistentes
-```bash
-# Crear una sesión screen (para que el proceso siga aunque se corte la conexión)
-screen -S bible-mining
-
-# Dentro de screen, activar el entorno virtual
-source venv/bin/activate
-
-# Ejecutar el análisis
-python bible_processing.py
-
-# Para desconectarse de screen sin detener el proceso:
-# Presionar Ctrl+A, luego D
-
-# Para reconectarse más tarde:
-screen -r bible-mining
-```
-Paso 5: Ejecutar Jupyter Notebook en el servidor
-```bash
-# Iniciar Jupyter en el servidor (sin navegador)
-jupyter notebook --no-browser --port=8888 --ip=0.0.0.0
-
-# En tu máquina local, crear túnel SSH para acceder
-# Desde terminal local:
-ssh -N -L 8888:localhost:8888 usuario@direccion_ip_servidor
-
-# Luego abrir en el navegador local:
-# http://localhost:8888
+pip install pandas numpy matplotlib scikit-learn textblob
 ```
 
- Uso del Notebook Jupyter
-1. El notebook bible_analysis.ipynb contiene las siguientes secciones:
-2. Carga de datos: Importación y lectura del texto bíblico
-3. Preprocesamiento: Limpieza, tokenización y eliminación de stopwords
-4. Análisis de frecuencias: Palabras más comunes por libro
-5. Análisis de co-ocurrencias: Relaciones entre términos
-6. Similitud entre libros: Matriz de similitud coseno
-7. Visualizaciones: Nubes de palabras, heatmaps, gráficos de barras
+---
+
+# Ejecución
+
+Ejecutar el programa principal mediante:
+
+```bash
+python main.py
+```
+
+---
+
+# Funcionamiento
+
+Al ejecutar el programa, el sistema realiza automáticamente las siguientes etapas:
+
+1. Carga el corpus bíblico.
+2. Realiza el preprocesamiento del texto.
+3. Construye la representación TF-IDF.
+4. Calcula la similitud entre documentos.
+5. Ejecuta el motor de búsqueda semántico.
+6. Entrena y evalúa el clasificador Naive Bayes.
+7. Genera texto utilizando modelos N-Gram.
+8. Realiza el análisis de sentimiento.
+9. Genera las visualizaciones del corpus.
+
+Durante la ejecución se generan los siguientes archivos:
+
+- `heatmap_libros.png`
+- `histograma_versiculos.png`
+- `pca_versiculos.png`
+- `sentimiento_libros.png`
+
+---
+
+# Integrantes
+
+- Carlos Bugueño
+- Constantino Bekios
+- Vicente Moyano
